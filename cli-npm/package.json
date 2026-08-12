@@ -1,0 +1,24 @@
+{
+  "name": "hydrascan",
+  "version": "0.1.0",
+  "description": "Graph-native supply-chain blast-radius analysis for npm and PyPI, powered by HydraDB.",
+  "bin": {
+    "hydrascan": "bin/hydrascan.js"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin"
+  ],
+  "keywords": [
+    "security",
+    "supply-chain",
+    "npm",
+    "dependencies",
+    "vulnerability",
+    "hydradb"
+  ],
+  "license": "MIT"
+}
