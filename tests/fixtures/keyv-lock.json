@@ -1,0 +1,47 @@
+{
+  "name": "my-web-app",
+  "version": "1.0.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "my-web-app",
+      "version": "1.0.0",
+      "dependencies": {
+        "eslint": "^9.9.0",
+        "got": "^14.4.2",
+        "express": "^4.19.2"
+      }
+    },
+    "node_modules/eslint": {
+      "version": "9.9.0",
+      "dependencies": { "file-entry-cache": "^11.1.6" }
+    },
+    "node_modules/file-entry-cache": {
+      "version": "11.1.6",
+      "dependencies": { "flat-cache": "^6.1.24" }
+    },
+    "node_modules/flat-cache": {
+      "version": "6.1.24",
+      "dependencies": { "keyv": "^6.0.0" }
+    },
+    "node_modules/keyv": {
+      "version": "6.0.0"
+    },
+    "node_modules/got": {
+      "version": "14.4.2",
+      "dependencies": { "cacheable-request": "^13.0.20" }
+    },
+    "node_modules/cacheable-request": {
+      "version": "13.0.20",
+      "dependencies": { "keyv": "^6.0.0" }
+    },
+    "node_modules/express": {
+      "version": "4.19.2",
+      "dependencies": { "body-parser": "^1.20.2" }
+    },
+    "node_modules/body-parser": {
+      "version": "1.20.2"
+    }
+  }
+}
