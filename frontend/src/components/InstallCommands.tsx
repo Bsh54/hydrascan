@@ -10,8 +10,7 @@ export function InstallCommands() {
   return (
     <section className="mb-24 flex w-full flex-col items-center">
       <p className="mb-8 max-w-2xl text-center text-body-md text-mercury">
-        Or install it and run it straight from your project — it detects npm and Python
-        automatically and gates your CI.
+        Or install it and run it straight from your project.
       </p>
       <div className="grid w-full max-w-3xl grid-cols-1 gap-6 md:grid-cols-2">
         {COMMANDS.map((c) => (
