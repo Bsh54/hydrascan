@@ -9,9 +9,24 @@ export function NavBar() {
       >
         HydraScan
       </Link>
-      <button className="flex items-center gap-2 rounded-[6px] bg-primary-container px-4 py-2 font-mono text-label-mono text-snow transition-colors hover:bg-primary-container/90">
-        Sign in with GitHub
-      </button>
+      <div className="flex items-center gap-6 font-mono text-label-mono">
+        <a
+          href="https://www.npmjs.com/package/hydrascan"
+          target="_blank"
+          rel="noreferrer"
+          className="text-pearl transition-colors hover:text-snow"
+        >
+          npm
+        </a>
+        <a
+          href="https://pypi.org/project/hydrascan/"
+          target="_blank"
+          rel="noreferrer"
+          className="text-pearl transition-colors hover:text-snow"
+        >
+          PyPI
+        </a>
+      </div>
     </nav>
   );
 }

@@ -14,9 +14,9 @@ export function Landing() {
 
       <NavBar />
 
-      <main className="relative z-10 mx-auto flex w-full max-w-max-width flex-grow flex-col items-center px-gutter pb-xl pt-[100px]">
+      <main className="relative z-10 mx-auto flex w-full max-w-max-width flex-grow flex-col items-center px-gutter pb-xl pt-[88px]">
         {/* Hero */}
-        <section className="mb-xl mt-xl flex w-full flex-col items-center text-center">
+        <section className="mb-lg mt-lg flex w-full flex-col items-center text-center">
           <h1 className="mb-md max-w-4xl text-display-xl leading-tight tracking-tighter text-snow drop-shadow-md">
             Map your impact. <br />Trace the threat.
           </h1>
