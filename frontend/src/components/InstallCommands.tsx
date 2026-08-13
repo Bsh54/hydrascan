@@ -17,6 +17,9 @@ export function InstallCommands() {
           <CommandCard key={c.label} {...c} />
         ))}
       </div>
+      <p className="mt-6 font-mono text-caption text-mercury">
+        Run <span className="text-phosphor">hydrascan --help</span> for all options.
+      </p>
     </section>
   );
 }
