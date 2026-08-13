@@ -98,12 +98,6 @@ uvicorn hydrascan.web.app:app --port 8000
 cd frontend && npm install && npm run dev
 ```
 
-The CLI works the same way:
-
-```bash
-hydrascan scan path/to/package-lock.json
-```
-
 ## License
 
 [MIT](LICENSE)

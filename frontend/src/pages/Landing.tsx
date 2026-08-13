@@ -2,6 +2,7 @@ import { ScanLine, Network, ShieldCheck, Telescope, Gauge, Wand2, SearchCheck, A
 import { NavBar } from "../components/NavBar";
 import { Footer } from "../components/Footer";
 import { ScanForm } from "../components/ScanForm";
+import { InstallCommands } from "../components/InstallCommands";
 
 export function Landing() {
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -25,6 +26,9 @@ export function Landing() {
           </p>
           <ScanForm />
         </section>
+
+        {/* Install commands */}
+        <InstallCommands />
 
         {/* How it works */}
         <section className="mb-24 flex w-full flex-col items-center">
