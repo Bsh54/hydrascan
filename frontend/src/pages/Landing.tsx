@@ -2,7 +2,6 @@ import { Rocket } from "lucide-react";
 import { NavBar } from "../components/NavBar";
 import { Footer } from "../components/Footer";
 import { ScanForm } from "../components/ScanForm";
-import { InstallCommands } from "../components/InstallCommands";
 import { WebSection } from "../components/WebSection";
 import { CliSection } from "../components/CliSection";
 import { BotSection } from "../components/BotSection";
@@ -18,8 +17,11 @@ export function Landing() {
       <NavBar />
 
       <main className="relative z-10 mx-auto flex w-full max-w-max-width flex-grow flex-col items-center px-gutter pb-xl pt-[88px]">
-        {/* Hero */}
-        <section className="mb-lg mt-lg flex w-full flex-col items-center text-center">
+        {/* Hero — the one primary action */}
+        <section className="mb-40 mt-lg flex w-full flex-col items-center text-center">
+          <span className="mb-4 font-mono text-label-mono uppercase tracking-widest text-mercury">
+            Supply-chain security · powered by HydraDB
+          </span>
           <h1 className="mb-md max-w-4xl text-display-xl leading-tight tracking-tighter text-snow drop-shadow-md">
             Map your impact. <br />Trace the threat.
           </h1>
@@ -30,31 +32,10 @@ export function Landing() {
           <ScanForm />
         </section>
 
-        {/* Install commands */}
-        <InstallCommands />
-
-        {/* Three surfaces: web, cli, bot */}
+        {/* Product showcase — one surface per section, consistent rhythm */}
         <WebSection onScan={scrollTop} />
         <CliSection />
         <BotSection />
-
-        {/* FAQ */}
-        <section className="mx-auto mb-24 flex w-full max-w-3xl flex-col items-center">
-          <h2 className="mb-12 text-center text-headline-lg text-snow">Frequently Asked Questions</h2>
-          <div className="w-full space-y-4">
-            {[
-              { q: "Is my code safe?", a: "We only read your package.json, requirements.txt, and lockfiles to build the dependency graph. Your source code is never read or stored." },
-              { q: "npm only?", a: "Both npm and PyPI. When a lockfile is present it is used directly; otherwise the transitive tree is resolved via deps.dev." },
-              { q: "Do you support private repositories?", a: "Public repositories work today, and the GitHub App can review pull requests on private repositories." },
-              { q: "Is there a CLI?", a: "Yes — the same engine runs from the terminal with a single command, and exits non-zero when a compromised dependency is reachable." },
-            ].map(({ q, a }) => (
-              <div key={q} className="rounded-xl border border-slate-edge bg-obsidian p-6">
-                <h3 className="mb-2 text-lg text-snow">{q}</h3>
-                <p className="text-body-md text-mercury">{a}</p>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Final CTA */}
         <section className="relative flex w-full flex-col items-center overflow-hidden rounded-[24px] border border-slate-edge bg-obsidian/50 py-24 text-center">

@@ -12,9 +12,15 @@ export function CliSection() {
             The same engine runs from your shell — no setup. It prints the fix for every compromised
             dependency and exits non-zero when one is reachable, so it drops straight into CI.
           </p>
-          <div className="inline-flex items-center gap-2 rounded-[6px] border border-slate-edge bg-obsidian px-4 py-3 font-mono text-label-mono">
-            <span className="text-fog">$</span>
-            <span className="text-phosphor">npx hydrascan</span>
+          <div className="flex flex-wrap gap-3">
+            <div className="inline-flex items-center gap-2 rounded-[6px] border border-slate-edge bg-obsidian px-4 py-3 font-mono text-label-mono">
+              <span className="text-fog">$</span>
+              <span className="text-phosphor">npx hydrascan</span>
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-[6px] border border-slate-edge bg-obsidian px-4 py-3 font-mono text-label-mono">
+              <span className="text-fog">$</span>
+              <span className="text-phosphor">pip install hydrascan</span>
+            </div>
           </div>
         </div>
 
