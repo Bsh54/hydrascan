@@ -6,18 +6,6 @@ function GithubIcon({ className }: { className?: string }) {
   );
 }
 
-function Mark() {
-  return (
-    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="12" cy="19" r="2.3" fill="#5fed83" />
-      <circle cx="5" cy="6" r="1.8" fill="#a4aea6" />
-      <circle cx="19" cy="6" r="1.8" fill="#a4aea6" />
-      <circle cx="12" cy="4" r="1.8" fill="#ff5b5b" />
-      <path d="M12 17V6M12 6 5 7M12 6l7 1" stroke="#484f58" strokeWidth="1.2" />
-    </svg>
-  );
-}
-
 const COLUMNS = [
   {
     title: "Product",
@@ -50,9 +38,7 @@ export function Footer() {
     <footer className="mt-auto w-full border-t border-slate-edge bg-carbon">
       <div className="mx-auto grid w-full max-w-max-width grid-cols-2 gap-lg px-gutter py-xl md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="col-span-2 flex flex-col gap-4 md:col-span-1">
-          <div className="flex items-center gap-2 text-headline-sm font-bold tracking-tighter text-phosphor">
-            <Mark /> HydraScan
-          </div>
+          <img src="/logo.png" alt="HydraScan" className="h-7 w-auto self-start" />
           <p className="max-w-xs text-body-sm text-fog">
             Graph-native supply-chain blast-radius analysis, powered by HydraDB.
           </p>

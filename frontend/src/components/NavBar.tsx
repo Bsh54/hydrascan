@@ -8,28 +8,12 @@ function GithubIcon({ className }: { className?: string }) {
   );
 }
 
-function Mark() {
-  return (
-    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="12" cy="19" r="2.3" fill="#5fed83" />
-      <circle cx="5" cy="6" r="1.8" fill="#a4aea6" />
-      <circle cx="19" cy="6" r="1.8" fill="#a4aea6" />
-      <circle cx="12" cy="4" r="1.8" fill="#ff5b5b" />
-      <path d="M12 17V6M12 6 5 7M12 6l7 1" stroke="#484f58" strokeWidth="1.2" />
-    </svg>
-  );
-}
-
 export function NavBar() {
   return (
     <nav className="fixed top-0 z-50 w-full border-b border-slate-edge bg-deep-space/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-max-width items-center justify-between px-gutter">
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-headline-sm font-bold tracking-tighter text-phosphor"
-        >
-          <Mark />
-          HydraScan
+        <Link to="/" className="flex items-center" aria-label="HydraScan">
+          <img src="/logo.png" alt="HydraScan" className="h-7 w-auto" />
         </Link>
 
         <div className="hidden items-center gap-8 font-mono text-label-mono text-pearl md:flex">
