@@ -8,7 +8,7 @@ const ROWS = [
 
 export function BotSection() {
   return (
-    <section className="mb-24 w-full">
+    <section id="bot" className="mb-24 w-full scroll-mt-24">
       <div className="grid w-full grid-cols-1 items-center gap-16 md:grid-cols-2">
         <div>
           <span className="font-mono text-label-mono uppercase tracking-widest text-secondary">

@@ -2,7 +2,7 @@ import { Terminal } from "lucide-react";
 
 export function CliSection() {
   return (
-    <section className="mb-24 w-full">
+    <section id="cli" className="mb-24 w-full scroll-mt-24">
       <div className="grid w-full grid-cols-1 items-center gap-16 md:grid-cols-2">
         {/* Text */}
         <div>

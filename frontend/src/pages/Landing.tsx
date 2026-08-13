@@ -19,7 +19,7 @@ export function Landing() {
 
       <main className="relative z-10 mx-auto flex w-full max-w-max-width flex-grow flex-col items-center px-gutter pb-xl pt-[88px]">
         {/* Hero — the one primary action */}
-        <section className="mb-40 mt-lg flex w-full flex-col items-center text-center">
+        <section id="top" className="mb-40 mt-lg flex w-full scroll-mt-24 flex-col items-center text-center">
           <span className="mb-4 font-mono text-label-mono uppercase tracking-widest text-mercury">
             Supply-chain security · powered by HydraDB
           </span>
