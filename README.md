@@ -1,6 +1,18 @@
-# HydraScan
+<p align="center">
+  <img src="assets/banner.png" alt="HydraScan" width="520" />
+</p>
 
-Graph-native supply-chain blast-radius analysis, powered by [HydraDB](https://github.com/hydra-db/hydradb).
+<p align="center">
+  Graph-native supply-chain blast-radius analysis, powered by
+  <a href="https://github.com/hydra-db/hydradb">HydraDB</a>.
+</p>
+
+<p align="center">
+  <a href="https://hydrascan.shadrakbessanh.me">Live demo</a> ·
+  <a href="https://www.npmjs.com/package/hydrascan">npm</a> ·
+  <a href="https://pypi.org/project/hydrascan/">PyPI</a> ·
+  <a href="https://github.com/apps/hydrascan">GitHub App</a>
+</p>
 
 ## What it does
 
@@ -52,28 +64,37 @@ For npm, HydraScan also reports the questions a real incident raises: which
 compromised packages **share a maintainer** or **source repository** (the worm
 pattern), and which dependency names are likely **typosquats**.
 
-## CLI — install and run
+## Surfaces
 
-The CLI talks to a hosted HydraScan API, so no local engine setup is needed.
-It exits `1` when a compromised dependency is reachable (`0` when clean), so it
-drops straight into CI.
+The same HydraDB-powered scan is exposed three ways.
 
-**npm** (for JavaScript / npm users):
+### Web
+
+Paste a repository URL at **[hydrascan.shadrakbessanh.me](https://hydrascan.shadrakbessanh.me)**
+and explore the dependency graph, the exposure score, every reachable compromised
+package, and the fixes.
+
+### CLI
+
+The CLI talks to the hosted API, so no local engine setup is needed. It exits `1`
+when a compromised dependency is reachable (`0` when clean), so it drops straight
+into CI.
 
 ```bash
-npx hydrascan sindresorhus/got          # no install
-npm install -g hydrascan && hydrascan chalk/chalk
+npx hydrascan sindresorhus/got     # npm — no install
+pip install hydrascan              # PyPI
+hydrascan                          # scan the current directory (npm + PyPI)
 ```
 
-**PyPI** (for Python users):
+It accepts a repo URL, an `owner/repo` shorthand, or a local lockfile path, and
+supports `--json` for automation.
 
-```bash
-pipx install hydrascan                  # or: pip install hydrascan
-hydrascan expressjs/express
-```
+### GitHub App
 
-Both accept a repo URL, an `owner/repo` shorthand, or a local lockfile path, and
-support `--json` for automation.
+Install **[the HydraScan app](https://github.com/apps/hydrascan)** on a repository
+and it reviews every pull request on its own — no workflow file. It comments with
+the reachable compromised dependencies and their fixes, and sets a status check
+that can block the merge.
 
 ## Running the full stack locally
 
