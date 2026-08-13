@@ -1,4 +1,3 @@
-import { Rocket } from "lucide-react";
 import { NavBar } from "../components/NavBar";
 import { Footer } from "../components/Footer";
 import { ScanForm } from "../components/ScanForm";
@@ -13,8 +12,8 @@ export function Landing() {
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-deep-space text-on-surface">
       <div className="fixed inset-0 -z-20 bg-deep-space" />
-      <HeroGraph />
       <div className="halo-glow pointer-events-none absolute left-1/2 top-[-200px] -z-10 h-[800px] w-full -translate-x-1/2" />
+      <HeroGraph />
 
       <NavBar />
 
@@ -38,20 +37,6 @@ export function Landing() {
         <WebSection onScan={scrollTop} />
         <CliSection />
         <BotSection />
-
-        {/* Final CTA */}
-        <section className="relative flex w-full flex-col items-center overflow-hidden rounded-[24px] border border-slate-edge bg-obsidian/50 py-24 text-center">
-          <div className="halo-glow absolute inset-0 z-0 opacity-50" />
-          <div className="relative z-10 flex flex-col items-center">
-            <h2 className="mb-6 text-4xl tracking-tighter text-snow md:text-5xl">Know your blast radius.</h2>
-            <p className="mb-10 max-w-xl text-body-lg text-pearl">
-              Scan a repository, or install the bot on your own — before the next supply-chain attack.
-            </p>
-            <button onClick={scrollTop} className="flex items-center justify-center gap-xs rounded-[6px] bg-terminal-green px-8 py-4 text-lg font-bold text-snow transition-all hover:bg-opacity-90">
-              Start Scanning for Free <Rocket className="h-5 w-5" strokeWidth={2} />
-            </button>
-          </div>
-        </section>
       </main>
       <Footer />
     </div>

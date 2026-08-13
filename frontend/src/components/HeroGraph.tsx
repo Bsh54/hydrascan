@@ -13,12 +13,12 @@ const NODE_COUNT = 46;
 const LINK_DIST = 150;
 const SPEED = 0.14;
 
-const EDGE = "rgba(120,139,152,0.16)";
+const EDGE = "rgba(130,150,165,0.32)";
 const pick = () => {
   const r = Math.random();
-  if (r > 0.94) return "#ff5b5b";
-  if (r > 0.78) return "#5fed83";
-  return "#5b6a78";
+  if (r > 0.92) return "#ff5b5b";
+  if (r > 0.74) return "#5fed83";
+  return "#8494a4";
 };
 
 export function HeroGraph() {
@@ -119,9 +119,9 @@ export function HeroGraph() {
 
   return (
     <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[840px] overflow-hidden">
-      <canvas ref={ref} className="h-full w-full opacity-70" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_38%,transparent,rgba(13,17,23,0.7)_75%,var(--tw-gradient-to,#0d1117))] from-deep-space" />
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-deep-space" />
+      <canvas ref={ref} className="h-full w-full opacity-90" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_50%_34%,rgba(13,17,23,0.55),transparent_70%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-deep-space" />
     </div>
   );
 }
