@@ -13,22 +13,22 @@ export function NavBar() {
     <nav className="fixed top-0 z-50 w-full border-b border-slate-edge bg-deep-space/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-max-width items-center justify-between px-gutter">
         <Link to="/" className="flex items-center" aria-label="HydraScan">
-          <img src="/logo.png" alt="HydraScan" className="h-7 w-auto" />
+          <img src="/logo.png" alt="HydraScan" className="h-9 w-auto" />
         </Link>
 
-        <div className="hidden items-center gap-8 font-mono text-label-mono text-pearl md:flex">
+        <div className="hidden items-center gap-8 font-mono text-body-sm text-pearl md:flex">
           <a href="#web" className="transition-colors hover:text-snow">Dashboard</a>
           <a href="#cli" className="transition-colors hover:text-snow">CLI</a>
           <a href="#bot" className="transition-colors hover:text-snow">GitHub App</a>
         </div>
 
-        <div className="flex items-center gap-5 font-mono text-label-mono text-pearl">
+        <div className="flex items-center gap-5 font-mono text-body-sm text-pearl">
           <a href="https://www.npmjs.com/package/hydrascan" target="_blank" rel="noreferrer" className="hidden transition-colors hover:text-snow sm:inline">npm</a>
           <a href="https://pypi.org/project/hydrascan/" target="_blank" rel="noreferrer" className="hidden transition-colors hover:text-snow sm:inline">PyPI</a>
           <a href="https://github.com/Bsh54/hydrascan" target="_blank" rel="noreferrer" aria-label="GitHub" className="transition-colors hover:text-snow">
-            <GithubIcon className="h-[18px] w-[18px]" />
+            <GithubIcon className="h-5 w-5" />
           </a>
-          <a href="#top" className="rounded-[6px] bg-terminal-green px-4 py-2 font-medium text-snow transition-colors hover:bg-primary">
+          <a href="#top" className="rounded-[6px] bg-terminal-green px-4 py-2 text-body-sm font-semibold text-snow transition-colors hover:bg-primary">
             Scan a repo
           </a>
         </div>

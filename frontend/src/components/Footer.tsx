@@ -38,8 +38,8 @@ export function Footer() {
     <footer className="mt-auto w-full border-t border-slate-edge bg-carbon">
       <div className="mx-auto grid w-full max-w-max-width grid-cols-2 gap-lg px-gutter py-xl md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="col-span-2 flex flex-col gap-4 md:col-span-1">
-          <img src="/logo.png" alt="HydraScan" className="h-7 w-auto self-start" />
-          <p className="max-w-xs text-body-sm text-fog">
+          <img src="/logo.png" alt="HydraScan" className="h-9 w-auto self-start" />
+          <p className="max-w-xs text-body-sm text-mercury">
             Graph-native supply-chain blast-radius analysis, powered by HydraDB.
           </p>
           <a
@@ -47,22 +47,22 @@ export function Footer() {
             target="_blank"
             rel="noreferrer"
             aria-label="GitHub"
-            className="text-fog transition-colors hover:text-phosphor"
+            className="text-mercury transition-colors hover:text-phosphor"
           >
-            <GithubIcon className="h-5 w-5" />
+            <GithubIcon className="h-6 w-6" />
           </a>
         </div>
 
         {COLUMNS.map((col) => (
           <div key={col.title} className="flex flex-col gap-3">
-            <span className="font-mono text-caption uppercase tracking-widest text-mercury">{col.title}</span>
+            <span className="font-mono text-label-mono uppercase tracking-widest text-snow">{col.title}</span>
             {col.links.map((l) => (
               <a
                 key={l.label}
                 href={l.href}
                 target={l.href.startsWith("http") ? "_blank" : undefined}
                 rel={l.href.startsWith("http") ? "noreferrer" : undefined}
-                className="text-body-sm text-fog transition-colors hover:text-phosphor"
+                className="text-body-md text-pearl transition-colors hover:text-phosphor"
               >
                 {l.label}
               </a>
@@ -72,7 +72,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-slate-edge/60">
-        <div className="mx-auto flex w-full max-w-max-width flex-col items-center justify-between gap-2 px-gutter py-5 font-mono text-caption text-fog md:flex-row">
+        <div className="mx-auto flex w-full max-w-max-width flex-col items-center justify-between gap-2 px-gutter py-5 font-mono text-body-sm text-mercury md:flex-row">
           <span>© 2026 HydraScan. Engineered for supply-chain integrity.</span>
           <span>Powered by HydraDB.</span>
         </div>
