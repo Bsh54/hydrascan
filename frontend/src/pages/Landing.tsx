@@ -10,7 +10,7 @@ export function Landing() {
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-deep-space text-on-surface">
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden text-on-surface">
       <div className="fixed inset-0 -z-20 bg-deep-space" />
       <div className="halo-glow pointer-events-none absolute left-1/2 top-[-200px] -z-10 h-[800px] w-full -translate-x-1/2" />
       <HeroGraph />
