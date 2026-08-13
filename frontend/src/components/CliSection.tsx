@@ -33,18 +33,22 @@ export function CliSection() {
             <Terminal className="ml-2 h-3.5 w-3.5 text-mercury" strokeWidth={2} />
           </div>
           <div className="flex flex-col gap-1 p-gutter font-mono text-caption leading-relaxed">
-            <div><span className="text-fog">$</span> <span className="text-snow">npx hydrascan sindresorhus/got</span></div>
+            <div><span className="text-fog">$</span> <span className="text-snow">npx hydrascan my-org/my-app</span></div>
             <div className="h-2" />
-            <div className="text-snow">got@14.4.2</div>
-            <div className="text-mercury">517 packages&nbsp; | &nbsp;npm&nbsp; | &nbsp;engine: hydradb</div>
+            <div className="text-snow">my-app@1.0.0</div>
+            <div className="text-mercury">642 packages&nbsp; | &nbsp;npm&nbsp; | &nbsp;engine: hydradb</div>
             <div className="h-2" />
-            <div className="text-error">Exposure score: 97/100 (Critical)</div>
+            <div className="text-error">Exposure score: 100/100 (Critical)</div>
             <div className="h-2" />
-            <div className="text-error">Fixes (8 compromised dependencies):</div>
+            <div className="text-error">Compromised - malicious packages reachable (3):</div>
             <div className="h-1" />
             <div><span className="text-error">keyv@6.0.0</span>&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;&nbsp;<span className="text-phosphor">npm uninstall keyv</span></div>
             <div><span className="text-error">flat-cache@6.1.24</span>&nbsp;&nbsp;-&gt;&nbsp;&nbsp;&nbsp;<span className="text-phosphor">npm uninstall flat-cache</span></div>
-            <div><span className="text-error">express@4.19.2</span>&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;&nbsp;<span className="text-phosphor">npm install express@4.20.0</span></div>
+            <div><span className="text-error">file-entry-cache@11.1.6</span>&nbsp;&nbsp;-&gt;&nbsp;&nbsp;&nbsp;<span className="text-phosphor">npm uninstall file-entry-cache</span></div>
+            <div className="h-2" />
+            <div style={{ color: "#f6c177" }}>Known vulnerabilities reachable (2):</div>
+            <div className="h-1" />
+            <div><span style={{ color: "#f6c177" }}>express@4.19.2</span>&nbsp;&nbsp;-&gt;&nbsp;&nbsp;&nbsp;<span className="text-phosphor">npm install express@4.20.0</span></div>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { GitPullRequest, XCircle } from "lucide-react";
 const ROWS = [
   { pkg: "keyv@6.0.0", advisory: "MAL-2026-11524", fix: "npm uninstall keyv" },
   { pkg: "flat-cache@6.1.24", advisory: "MAL-2026-11971", fix: "npm uninstall flat-cache" },
-  { pkg: "express@4.19.2", advisory: "GHSA-qw6h-vgh9", fix: "npm install express@4.20.0" },
+  { pkg: "file-entry-cache@11.1.6", advisory: "MAL-2026-11970", fix: "npm uninstall file-entry-cache" },
 ];
 
 export function BotSection() {
