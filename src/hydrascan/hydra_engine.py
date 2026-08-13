@@ -55,20 +55,20 @@ class HydraEngine:
 
         self._ingest(graph, ids)
 
-        compromised: dict[str, list[Advisory]] = {
+        affected: dict[str, list[Advisory]] = {
             pkg.node_id: advisories[(pkg.name, pkg.version)]
             for pkg in graph.packages.values()
             if (pkg.name, pkg.version) in advisories
         }
         report = BlastRadiusReport(
             root=graph.root,
-            compromised=compromised,
+            affected=affected,
             total_packages=len(graph.packages),
         )
 
         root_id = ids[graph.root.node_id]
         by_hydra_id = {hid: node_id for node_id, hid in ids.items()}
-        for node_id, node_advisories in compromised.items():
+        for node_id, node_advisories in affected.items():
             for hydra_path in self._shortest_paths(root_id, ids[node_id]):
                 nodes = [graph.packages[by_hydra_id[h]] for h in hydra_path]
                 report.paths.append(AttackPath(nodes=nodes, advisory=_worst(node_advisories)))

@@ -54,8 +54,8 @@ export function ExposureCard({ result, className = "" }: ExposureCardProps) {
       {/* Metrics */}
       <div className="grid flex-1 grid-cols-3 gap-sm">
         <Stat label="Packages" value={result.totalPackages} />
-        <Stat label="Compromised" value={result.compromised.length} danger />
-        <Stat label="Attack paths" value={result.paths.length} danger={result.paths.length > 0} />
+        <Stat label="Compromised" value={result.compromised.length} danger={result.compromised.length > 0} />
+        <Stat label="Vulnerable" value={(result.vulnerable ?? []).length} />
       </div>
 
       {/* Export */}

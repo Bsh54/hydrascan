@@ -52,12 +52,17 @@ export function Dashboard() {
                 </span>
               )}
             </div>
-            {result.isExposed && (
+            {result.isCompromised ? (
               <div className="flex items-center gap-xs rounded-[6px] border border-slate-edge bg-obsidian px-sm py-xs shadow-lg">
                 <div className="h-2 w-2 rounded-full bg-error" />
                 <span className="font-mono text-label-mono text-mercury">Compromised Path Detected</span>
               </div>
-            )}
+            ) : result.isExposed ? (
+              <div className="flex items-center gap-xs rounded-[6px] border border-slate-edge bg-obsidian px-sm py-xs shadow-lg">
+                <div className="h-2 w-2 rounded-full bg-tertiary" />
+                <span className="font-mono text-label-mono text-mercury">Vulnerable Dependencies Reachable</span>
+              </div>
+            ) : null}
           </div>
           <div className="h-full w-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-surface/50 to-abyss">
             <GraphView result={result} onSelect={setSelected} />

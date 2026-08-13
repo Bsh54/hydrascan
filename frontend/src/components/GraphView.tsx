@@ -44,7 +44,11 @@ export function GraphView({ result, onSelect }: GraphViewProps) {
     const elements: cytoscape.ElementDefinition[] = [];
     for (const id of nodeIds) {
       const node = index.get(id);
-      const role = node?.type === "application" ? "root" : node?.compromised ? "compromised" : "package";
+      const role =
+        node?.type === "application" ? "root"
+        : node?.compromised ? "compromised"
+        : node?.vulnerable ? "vulnerable"
+        : "package";
       elements.push({
         data: {
           id,
@@ -83,6 +87,10 @@ export function GraphView({ result, onSelect }: GraphViewProps) {
             label: "data(label)", color: "#ffb4ab", "font-family": "'JetBrains Mono', monospace",
             "font-size": "10px", "text-valign": "bottom", "text-margin-y": 5,
           },
+        },
+        {
+          selector: 'node[role = "vulnerable"]',
+          style: { "background-color": "#f6c177", width: 17, height: 17 },
         },
         {
           selector: "edge",
@@ -168,7 +176,8 @@ export function GraphView({ result, onSelect }: GraphViewProps) {
       <div ref={container} className="h-full w-full" />
       <div className="pointer-events-none absolute bottom-3 left-3 z-30 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] text-mercury/70">
         <LegendDot color="#5fed83" label="your project" />
-        <LegendDot color="#ff5b5b" label="compromised" />
+        <LegendDot color="#ff5b5b" label="compromised (malware)" />
+        <LegendDot color="#f6c177" label="vulnerable (CVE)" />
         <LegendDot color="#8dd6ff" label="dependency (by cluster)" />
       </div>
       <div className="absolute left-3 top-16 z-30 flex flex-col overflow-hidden rounded-[6px] border border-slate-edge bg-obsidian/90 backdrop-blur">

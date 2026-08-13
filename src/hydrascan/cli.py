@@ -90,7 +90,9 @@ def scan(
     else:
         _render(data)
 
-    raise typer.Exit(1 if data.get("isExposed") else 0)
+    # Non-zero only on real compromise (reachable malware), so CI blocks on the
+    # thing that actually runs code, not on every transitive CVE.
+    raise typer.Exit(1 if data.get("isCompromised") else 0)
 
 
 def _payload(target: str) -> dict:
@@ -117,23 +119,32 @@ def _render(data: dict) -> None:
     typer.secho(f"  Exposure score: {score}/100  ({_risk(score)})", fg=color, bold=True)
 
     fixes = data.get("remediation", [])
+    malware = [f for f in fixes if f.get("kind") == "malware"]
+    cves = [f for f in fixes if f.get("kind") != "malware"]
+
     if not fixes:
         typer.echo()
-        typer.secho("  No reachable compromised dependencies.", fg=typer.colors.GREEN)
+        typer.secho("  No reachable compromised or vulnerable dependencies.", fg=typer.colors.GREEN)
         typer.echo()
         return
 
+    if malware:
+        _section("Compromised - malicious packages reachable", malware, typer.colors.RED)
+    if cves:
+        _section("Known vulnerabilities reachable", cves, typer.colors.YELLOW)
+    typer.echo()
+
+
+def _section(title: str, fixes: list[dict], color: str) -> None:
     width = max(len(f["package"]) for f in fixes)
     typer.echo()
-    plural = "y" if len(fixes) == 1 else "ies"
-    typer.secho(f"  Fixes ({len(fixes)} compromised dependenc{plural}):", fg=typer.colors.RED, bold=True)
+    typer.secho(f"  {title} ({len(fixes)}):", fg=color, bold=True)
     typer.echo()
     for fix in fixes:
         typer.echo("    ", nl=False)
-        typer.secho(f"{fix['package']:<{width}}", fg=typer.colors.RED, nl=False)
+        typer.secho(f"{fix['package']:<{width}}", fg=color, nl=False)
         typer.echo("   ->   ", nl=False)
         typer.secho(fix["command"], fg=typer.colors.GREEN)
-    typer.echo()
 
 
 def _risk(score: int) -> str:

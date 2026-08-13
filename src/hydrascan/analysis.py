@@ -11,8 +11,8 @@ def compute_blast_radius(
     graph: DependencyGraph,
     advisories: dict[tuple[str, str], list[Advisory]],
 ) -> BlastRadiusReport:
-    """Given a graph and per-coordinate advisories, find every path root -> compromised."""
-    compromised: dict[str, list[Advisory]] = {
+    """Given a graph and per-coordinate advisories, find every path root -> affected node."""
+    affected: dict[str, list[Advisory]] = {
         pkg.node_id: advisories[(pkg.name, pkg.version)]
         for pkg in graph.packages.values()
         if (pkg.name, pkg.version) in advisories
@@ -24,10 +24,10 @@ def compute_blast_radius(
 
     report = BlastRadiusReport(
         root=graph.root,
-        compromised=compromised,
+        affected=affected,
         total_packages=len(graph.packages),
     )
-    for node_id, node_advisories in compromised.items():
+    for node_id, node_advisories in affected.items():
         if not node_advisories:
             continue
         primary = _worst(node_advisories)

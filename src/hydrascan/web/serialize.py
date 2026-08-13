@@ -1,17 +1,23 @@
-"""Serialize scan results into the JSON shape consumed by the frontend."""
+"""Serialize scan results into the JSON shape consumed by the frontend.
+
+Reachable advisory-bearing packages are split into two honest categories:
+``compromised`` (malicious-package advisories — real supply-chain compromise) and
+``vulnerable`` (ordinary CVE/GHSA advisories).
+"""
 
 from __future__ import annotations
 
 from typing import Any
 
+from ..models import Advisory
 from ..service import ScanResult
 
 
 def serialize_scan(result: ScanResult, ecosystem: str = "npm") -> dict[str, Any]:
     graph, report = result.graph, result.report
-    compromised_coords = {
-        graph.packages[node_id].coordinate for node_id in report.compromised
-    }
+
+    malware_coords = {graph.packages[n].coordinate for n in report.malware}
+    vulnerable_coords = {graph.packages[n].coordinate for n in report.vulnerable}
 
     nodes = [
         {
@@ -19,7 +25,8 @@ def serialize_scan(result: ScanResult, ecosystem: str = "npm") -> dict[str, Any]
             "name": pkg.name,
             "version": pkg.version,
             "type": "application" if pkg.is_root else "package",
-            "compromised": pkg.coordinate in compromised_coords,
+            "compromised": pkg.coordinate in malware_coords,
+            "vulnerable": pkg.coordinate in vulnerable_coords,
         }
         for pkg in _unique_by_coordinate(result)
     ]
@@ -36,12 +43,15 @@ def serialize_scan(result: ScanResult, ecosystem: str = "npm") -> dict[str, Any]
         "project": graph.root.coordinate,
         "totalPackages": report.total_packages,
         "isExposed": report.is_exposed,
+        "isCompromised": report.has_malware,
         "exposureScore": report.exposure_score,
-        "compromised": _serialize_compromised(result),
+        "compromised": _serialize_affected(result, report.malware),
+        "vulnerable": _serialize_affected(result, report.vulnerable),
         "paths": [
             {
                 "nodes": [p.coordinate for p in path.nodes],
                 "advisory": _serialize_advisory(path.advisory),
+                "malicious": path.advisory.is_malicious,
             }
             for path in report.paths
         ],
@@ -58,9 +68,11 @@ def _unique_by_coordinate(result: ScanResult) -> list:
     return list(seen.values())
 
 
-def _serialize_compromised(result: ScanResult) -> list[dict[str, Any]]:
+def _serialize_affected(
+    result: ScanResult, group: dict[str, list[Advisory]]
+) -> list[dict[str, Any]]:
     out = []
-    for node_id, advisories in result.report.compromised.items():
+    for node_id, advisories in group.items():
         pkg = result.graph.packages[node_id]
         out.append(
             {
@@ -74,28 +86,33 @@ def _serialize_compromised(result: ScanResult) -> list[dict[str, Any]]:
 def _serialize_remediation(result: ScanResult, ecosystem: str) -> list[dict[str, Any]]:
     introduced_by = _introduced_by(result)
     out = []
-    for node_id, advisories in result.report.compromised.items():
+    for node_id, advisories in result.report.affected.items():
         pkg = result.graph.packages[node_id]
+        malicious = any(a.is_malicious for a in advisories)
         fixed = next((a.fixed_version for a in advisories if a.fixed_version), None)
         out.append(
             {
                 "package": pkg.coordinate,
+                "kind": "malware" if malicious else "cve",
                 "introducedBy": introduced_by.get(pkg.coordinate),
                 "fixedVersion": fixed,
-                "command": _fix_command(ecosystem, pkg.name, fixed),
+                "command": _fix_command(ecosystem, pkg.name, fixed, malicious),
             }
         )
     return out
 
 
-def _fix_command(ecosystem: str, name: str, fixed: str | None) -> str:
+def _fix_command(ecosystem: str, name: str, fixed: str | None, malicious: bool) -> str:
+    # Malware has no safe version to move to — remove it outright.
+    if malicious:
+        return f"pip uninstall {name}" if ecosystem == "PyPI" else f"npm uninstall {name}"
     if ecosystem == "PyPI":
         return f"pip install {name}=={fixed}" if fixed else f"pip uninstall {name}"
     return f"npm install {name}@{fixed}" if fixed else f"npm uninstall {name}"
 
 
 def _introduced_by(result: ScanResult) -> dict[str, str]:
-    """Map each compromised coordinate to the direct dependency that pulls it in."""
+    """Map each affected coordinate to the direct dependency that pulls it in."""
     mapping: dict[str, str] = {}
     for path in result.report.paths:
         if len(path.nodes) >= 2:

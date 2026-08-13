@@ -61,14 +61,16 @@ def run_scan(
     payload["ecosystem"] = ecosystem
     payload["engine"] = result.engine
 
-    compromised = [
-        result.graph.packages[node_id].coordinate for node_id in result.report.compromised
+    # Shared-maintainer / infrastructure analysis is the worm signal: it only
+    # makes sense for genuinely malicious packages, not ordinary CVEs.
+    malware = [
+        result.graph.packages[node_id].coordinate for node_id in result.report.malware
     ]
     if ecosystem == "npm":
         payload["typosquats"] = detect_typosquats(
             [pkg.name for pkg in result.graph.packages.values()]
         )
-        ownership = analyze_ownership(compromised)
+        ownership = analyze_ownership(malware)
         payload["sharedMaintainers"] = ownership["maintainers"]
         payload["sharedInfrastructure"] = ownership["infrastructure"]
     else:

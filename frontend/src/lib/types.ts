@@ -28,6 +28,7 @@ export interface GraphNode {
   version: string;
   type: "application" | "package";
   compromised: boolean;
+  vulnerable?: boolean;
 }
 
 export interface GraphEdge {
@@ -47,6 +48,7 @@ export interface CompromisedPackage {
 
 export interface Remediation {
   package: string;
+  kind: "malware" | "cve";
   introducedBy: string | null;
   fixedVersion: string | null;
   command: string;
@@ -56,8 +58,10 @@ export interface ScanResult {
   project: string;
   totalPackages: number;
   isExposed: boolean;
+  isCompromised: boolean;
   exposureScore: number;
   compromised: CompromisedPackage[];
+  vulnerable: CompromisedPackage[];
   paths: AttackPath[];
   remediation: Remediation[];
   nodes: GraphNode[];

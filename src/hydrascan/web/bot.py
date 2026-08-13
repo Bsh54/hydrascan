@@ -65,36 +65,51 @@ def _handle_pull_request(event: dict) -> None:
         _comment(repo, number, token, f"HydraScan could not scan this repository: `{exc}`")
         return
 
-    compromised = result.get("compromised", [])
+    malware = result.get("compromised", [])
+    vulnerable = result.get("vulnerable", [])
     _comment(repo, number, token, _render_comment(result))
-    if compromised:
-        _set_status(repo, head_sha, token, "failure", f"{len(compromised)} compromised dependencies reachable")
+    if malware:
+        _set_status(repo, head_sha, token, "failure", f"{len(malware)} compromised (malicious) dependencies reachable")
+    elif vulnerable:
+        _set_status(repo, head_sha, token, "success", f"No malware; {len(vulnerable)} known vulnerabilities reachable")
     else:
-        _set_status(repo, head_sha, token, "success", "No reachable compromised dependencies")
+        _set_status(repo, head_sha, token, "success", "No reachable compromised or vulnerable dependencies")
 
 
 def _render_comment(result: dict) -> str:
-    compromised = result.get("compromised", [])
+    malware = result.get("compromised", [])
+    vulnerable = result.get("vulnerable", [])
     score = result.get("exposureScore", 0)
     project = result.get("project", "project")
-    header = f"### HydraScan — `{project}`\n\n**Exposure score: {score}/100**\n\n"
-
-    if not compromised:
-        return header + "No reachable compromised dependencies. ✅"
-
     fixes = {r["package"]: r for r in result.get("remediation", [])}
-    lines = [
-        header,
-        f"{len(compromised)} compromised dependenc{'y' if len(compromised) == 1 else 'ies'} "
-        "reachable from your project:\n",
-        "| Dependency | Advisory | Fix |",
-        "| --- | --- | --- |",
-    ]
-    for pkg in compromised:
+
+    header = f"### HydraScan — `{project}`\n\n**Exposure score: {score}/100**\n\n"
+    if not malware and not vulnerable:
+        return header + "No reachable compromised or vulnerable dependencies. ✅"
+
+    parts = [header]
+    if malware:
+        parts.append(_table(
+            f"🚨 {len(malware)} compromised (malicious) "
+            f"dependenc{'y' if len(malware) == 1 else 'ies'} reachable — these run code at install time:",
+            malware, fixes,
+        ))
+    if vulnerable:
+        parts.append(_table(
+            f"⚠️ {len(vulnerable)} known "
+            f"vulnerabilit{'y' if len(vulnerable) == 1 else 'ies'} reachable:",
+            vulnerable, fixes,
+        ))
+    parts.append("_Blast radius computed by HydraDB._")
+    return "\n\n".join(parts)
+
+
+def _table(intro: str, packages: list, fixes: dict) -> str:
+    lines = [intro, "", "| Dependency | Advisory | Fix |", "| --- | --- | --- |"]
+    for pkg in packages:
         advisory = (pkg.get("advisories") or [{}])[0]
         fix = fixes.get(pkg["coordinate"], {}).get("command", "")
         lines.append(f"| `{pkg['coordinate']}` | {advisory.get('id', '')} | `{fix}` |")
-    lines.append("\n_Blast radius computed by HydraDB._")
     return "\n".join(lines)
 
 

@@ -75,12 +75,30 @@ class AttackPath:
 
 @dataclass(slots=True)
 class BlastRadiusReport:
-    """The result of a scan: what is compromised and how it is reachable."""
+    """The result of a scan: which reachable packages carry advisories.
+
+    ``affected`` maps each reachable advisory-bearing package to its advisories.
+    A package is *malware* when any of its advisories is a malicious-package
+    advisory (OSV ``MAL-`` records: hijacked releases, credential stealers,
+    typosquats); otherwise it is merely *vulnerable* (ordinary CVE/GHSA).
+    """
 
     root: Package
-    compromised: dict[str, list[Advisory]] = field(default_factory=dict)
+    affected: dict[str, list[Advisory]] = field(default_factory=dict)
     paths: list[AttackPath] = field(default_factory=list)
     total_packages: int = 0
+
+    @property
+    def malware(self) -> dict[str, list[Advisory]]:
+        return {n: a for n, a in self.affected.items() if any(x.is_malicious for x in a)}
+
+    @property
+    def vulnerable(self) -> dict[str, list[Advisory]]:
+        return {n: a for n, a in self.affected.items() if not any(x.is_malicious for x in a)}
+
+    @property
+    def has_malware(self) -> bool:
+        return bool(self.malware)
 
     @property
     def is_exposed(self) -> bool:
