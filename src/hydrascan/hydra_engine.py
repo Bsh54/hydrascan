@@ -107,15 +107,18 @@ class HydraEngine:
         return paths
 
     def _query(self, cypher: str) -> dict:
-        response = self._client.post(
-            f"{self._url}/v1/graphs/{_GRAPH}/query",
-            headers={
-                "Authorization": f"Bearer {self._token}",
-                "X-Graph-Namespace": _NAMESPACE,
-                "Content-Type": "application/json",
-            },
-            json={"cell_id": _CELL, "query": cypher},
-        )
+        try:
+            response = self._client.post(
+                f"{self._url}/v1/graphs/{_GRAPH}/query",
+                headers={
+                    "Authorization": f"Bearer {self._token}",
+                    "X-Graph-Namespace": _NAMESPACE,
+                    "Content-Type": "application/json",
+                },
+                json={"cell_id": _CELL, "query": cypher},
+            )
+        except httpx.HTTPError as exc:
+            raise HydraEngineError(f"HydraDB is unreachable: {exc}") from exc
         if response.status_code != 200:
             raise HydraEngineError(f"HydraDB query failed ({response.status_code}): {response.text}")
         body = response.json()
