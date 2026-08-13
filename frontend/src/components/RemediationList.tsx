@@ -22,7 +22,7 @@ export function RemediationList({ result, className = "" }: RemediationListProps
       {malware.length > 0 && (
         <Section
           icon={<ShieldAlert className="h-3.5 w-3.5" strokeWidth={2} />}
-          title="Compromised — malicious packages"
+          title="Compromised: malicious packages"
           subtitle="Reachable packages with malicious-package advisories. These run code at install time; remove them."
           tone="error"
           packages={malware}
@@ -33,7 +33,7 @@ export function RemediationList({ result, className = "" }: RemediationListProps
         <Section
           icon={<TriangleAlert className="h-3.5 w-3.5" strokeWidth={2} />}
           title="Known vulnerabilities"
-          subtitle="Reachable packages with ordinary CVE/GHSA advisories — not malware, but worth patching."
+          subtitle="Reachable packages with ordinary CVE/GHSA advisories, not malware, but worth patching."
           tone="tertiary"
           packages={vulnerable}
           fixByPackage={fixByPackage}

@@ -20,7 +20,7 @@ export function IntelligencePanel({ result }: IntelligencePanelProps) {
             Shared Maintainers
           </h3>
           <p className="text-body-sm text-mercury">
-            One hijacked account can compromise every package it controls — the worm pattern.
+            One hijacked account can compromise every package it controls, the worm pattern.
           </p>
           <ul className="flex flex-col gap-xs">
             {maintainers.map((m) => (
@@ -65,7 +65,7 @@ export function IntelligencePanel({ result }: IntelligencePanelProps) {
             Possible Typosquats
           </h3>
           <p className="text-body-sm text-mercury">
-            Dependency names one edit away from a popular package — a common attack vector.
+            Dependency names one edit away from a popular package, a common attack vector.
           </p>
           <ul className="flex flex-col gap-xs">
             {typosquats.map((t) => (

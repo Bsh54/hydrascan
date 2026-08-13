@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import itertools
 import os
+import random
 
 import httpx
 
@@ -26,7 +27,10 @@ _CELL = "cell-0"
 _MAX_LEN = 12
 _PATHS_PER_TARGET = 5
 
-_scan_counter = itertools.count(1)
+# The engine writes into a single shared graph, so each scan takes a disjoint
+# integer id range. Seeding the counter from a random offset keeps ranges from
+# colliding with nodes left by a previous process after a restart.
+_scan_counter = itertools.count(random.randrange(1, 1_000_000))
 
 
 class HydraEngineError(RuntimeError):
@@ -70,6 +74,9 @@ class HydraEngine:
         by_hydra_id = {hid: node_id for node_id, hid in ids.items()}
         for node_id, node_advisories in affected.items():
             for hydra_path in self._shortest_paths(root_id, ids[node_id]):
+                # Ignore any path that strays into another scan's id range.
+                if any(h not in by_hydra_id for h in hydra_path):
+                    continue
                 nodes = [graph.packages[by_hydra_id[h]] for h in hydra_path]
                 report.paths.append(AttackPath(nodes=nodes, advisory=_worst(node_advisories)))
         return report

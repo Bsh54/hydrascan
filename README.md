@@ -16,8 +16,8 @@
 
 ## What it does
 
-When an npm package is compromised — as in the August 2026 `keyv` / Shai-Hulud
-incident that affected 400+ packages — the question that matters is not
+When an npm package is compromised, as in the August 2026 `keyv` / Shai-Hulud
+incident that affected 400+ packages, the question that matters is not
 "is this package vulnerable?" but **"is my project actually reachable from it,
 and through which path?"**
 
@@ -41,13 +41,13 @@ traversal so it always produces a result.
 
 ## Dependency reachability, not code reachability
 
-Modern SCA tools reduce false positives with call-graph reachability — proving a
+Modern SCA tools reduce false positives with call-graph reachability, proving a
 vulnerable *function* is actually invoked. That is the right model for classic
 CVEs, but the wrong model for supply-chain malware. A compromised package like
 `keyv` runs its payload from an install-time `preinstall` hook: it executes
 because it is present in the install tree, regardless of whether your code ever
-calls it. HydraScan therefore computes **dependency reachability** — is a
-compromised package present on a path from your project — which is exactly the
+calls it. HydraScan therefore computes **dependency reachability**, is a
+compromised package present on a path from your project, which is exactly the
 signal that matters for install-time malware.
 
 ## Dependency resolution
@@ -81,7 +81,7 @@ when a compromised dependency is reachable (`0` when clean), so it drops straigh
 into CI.
 
 ```bash
-npx hydrascan sindresorhus/got     # npm — no install
+npx hydrascan sindresorhus/got     # npm, no install
 pip install hydrascan              # PyPI
 hydrascan                          # scan the current directory (npm + PyPI)
 ```
@@ -92,7 +92,7 @@ supports `--json` for automation.
 ### GitHub App
 
 Install **[the HydraScan app](https://github.com/apps/hydrascan)** on a repository
-and it reviews every pull request on its own — no workflow file. It comments with
+and it reviews every pull request on its own, no workflow file. It comments with
 the reachable compromised dependencies and their fixes, and sets a status check
 that can block the merge.
 

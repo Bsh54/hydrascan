@@ -16,7 +16,7 @@ export function BotSection() {
           </span>
           <h2 className="mb-6 mt-3 text-headline-lg text-snow">Reviews every pull request.</h2>
           <p className="mb-8 text-body-lg text-pearl">
-            Install the HydraScan app on a repository and it checks each pull request on its own —
+            Install the HydraScan app on a repository and it checks each pull request on its own, 
             no workflow file, no config. It comments with the reachable compromised dependencies and
             their fixes, and sets a status check that can block the merge.
           </p>

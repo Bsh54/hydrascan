@@ -9,7 +9,7 @@ export function CliSection() {
           <span className="font-mono text-label-mono uppercase tracking-widest text-secondary">Command line</span>
           <h2 className="mb-6 mt-3 text-headline-lg text-snow">Fix it from your terminal.</h2>
           <p className="mb-8 text-body-lg text-pearl">
-            The same engine runs from your shell — no setup. It prints the fix for every compromised
+            The same engine runs from your shell, no setup. It prints the fix for every compromised
             dependency and exits non-zero when one is reachable, so it drops straight into CI.
           </p>
           <div className="flex flex-wrap gap-3">

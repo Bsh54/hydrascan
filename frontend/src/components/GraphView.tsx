@@ -135,7 +135,7 @@ export function GraphView({ result, onSelect }: GraphViewProps) {
     });
 
     // Flowing dashes: the "current" runs from the compromised packages up
-    // toward the project — the direction the threat actually reaches you.
+    // toward the project, the direction the threat actually reaches you.
     let offset = 0;
     let raf = 0;
     const flow = () => {

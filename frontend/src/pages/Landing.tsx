@@ -18,7 +18,7 @@ export function Landing() {
       <NavBar />
 
       <main className="relative z-10 mx-auto flex w-full max-w-max-width flex-grow flex-col items-center px-gutter pb-xl pt-[88px]">
-        {/* Hero — the one primary action */}
+        {/* Hero, the one primary action */}
         <section id="top" className="mb-40 mt-lg flex w-full scroll-mt-24 flex-col items-center text-center">
           <span className="mb-4 font-mono text-label-mono uppercase tracking-widest text-mercury">
             Supply-chain security · powered by HydraDB
@@ -28,12 +28,12 @@ export function Landing() {
           </h1>
           <p className="mb-lg max-w-2xl text-body-lg text-pearl">
             Map your npm or PyPI dependency graph, and see exactly which of your projects a
-            compromised package can reach — and through which path.
+            compromised package can reach, and through which path.
           </p>
           <ScanForm />
         </section>
 
-        {/* Product showcase — one surface per section, consistent rhythm */}
+        {/* Product showcase, one surface per section, consistent rhythm */}
         <WebSection onScan={scrollTop} />
         <CliSection />
         <BotSection />
