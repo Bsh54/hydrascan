@@ -52,12 +52,14 @@ def _handle_pull_request(event: dict) -> None:
     pr = event["pull_request"]
     number = pr["number"]
     head_sha = pr["head"]["sha"]
+    head_repo = pr["head"]["repo"]["full_name"]
+    head_ref = pr["head"]["ref"]
 
     token = _installation_token(installation_id)
     _set_status(repo, head_sha, token, "pending", "Scanning dependencies...")
 
     try:
-        result = run_scan(repo_url=f"{_API_HTML}/{repo}")
+        result = run_scan(repo_url=f"{_API_HTML}/{head_repo}", ref=head_ref, token=token)
     except Exception as exc:  # noqa: BLE001 - report any failure back to the PR
         _set_status(repo, head_sha, token, "error", "Scan failed")
         _comment(repo, number, token, f"HydraScan could not scan this repository: `{exc}`")

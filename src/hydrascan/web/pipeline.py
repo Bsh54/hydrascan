@@ -22,6 +22,8 @@ def build_graph(
     repo_url: str | None = None,
     lockfile: dict | None = None,
     requirements: str | None = None,
+    ref: str | None = None,
+    token: str | None = None,
 ) -> tuple[DependencyGraph, str, str]:
     if lockfile is not None:
         return parse_lockfile_data(lockfile), "lockfile", "npm"
@@ -30,15 +32,15 @@ def build_graph(
     if not repo_url:
         raise ScanInputError("provide repoUrl, lockfile, or requirements")
 
-    lock = fetch_lockfile(repo_url)
+    lock = fetch_lockfile(repo_url, ref=ref, token=token)
     if lock is not None:
         return parse_lockfile_data(lock), "lockfile", "npm"
 
-    reqs = fetch_requirements(repo_url)
+    reqs = fetch_requirements(repo_url, ref=ref, token=token)
     if reqs is not None:
         return resolve_from_requirements(reqs), "deps.dev", "PyPI"
 
-    return resolve_from_package_json(fetch_manifest(repo_url)), "deps.dev", "npm"
+    return resolve_from_package_json(fetch_manifest(repo_url, ref=ref, token=token)), "deps.dev", "npm"
 
 
 def run_scan(
@@ -46,9 +48,11 @@ def run_scan(
     repo_url: str | None = None,
     lockfile: dict | None = None,
     requirements: str | None = None,
+    ref: str | None = None,
+    token: str | None = None,
 ) -> dict:
     graph, source, ecosystem = build_graph(
-        repo_url=repo_url, lockfile=lockfile, requirements=requirements
+        repo_url=repo_url, lockfile=lockfile, requirements=requirements, ref=ref, token=token
     )
     result = scan_graph(graph, ecosystem=ecosystem)
 
