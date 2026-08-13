@@ -22,7 +22,21 @@ from pathlib import Path
 import httpx
 import typer
 
-app = typer.Typer(add_completion=False, help="Graph-native supply-chain analysis.")
+_HELP = """Graph-native supply-chain blast-radius analysis, powered by HydraDB.
+
+Scan an npm or PyPI project and see which of your dependencies are compromised
+and reachable, with the exact command to fix each one.
+
+Examples:
+  hydrascan sindresorhus/got          scan a GitHub repo (owner/repo)
+  hydrascan https://github.com/x/y    scan a GitHub repo (full URL)
+  hydrascan ./package-lock.json       scan a local npm lockfile
+  hydrascan --json                    machine-readable output for CI
+
+Exit codes: 0 = clean, 1 = compromised dependency reachable, 2 = error.
+"""
+
+app = typer.Typer(add_completion=False, help=_HELP)
 
 _DEFAULT_API = "https://hydrascan.shadrakbessanh.me"
 _SHORTHAND = re.compile(r"^[\w.-]+/[\w.-]+$")
@@ -32,10 +46,31 @@ _RISK = [(90, "Critical"), (70, "High"), (40, "Moderate"), (1, "Low")]
 
 @app.command()
 def scan(
-    target: str = typer.Argument(..., help="Repo URL, owner/repo, or a lockfile path."),
-    api: str = typer.Option("", help="HydraScan API base URL."),
-    as_json: bool = typer.Option(False, "--json", help="Emit raw JSON for CI/automation."),
+    target: str = typer.Argument(
+        ...,
+        help="A GitHub repo URL, an owner/repo shorthand, or a path to a lockfile.",
+    ),
+    api: str = typer.Option(
+        "", "--api", help="Base URL of the HydraScan API (or set HYDRASCAN_API_URL)."
+    ),
+    as_json: bool = typer.Option(
+        False, "--json", help="Emit the raw JSON result for CI and automation."
+    ),
 ) -> None:
+    """Scan an npm or PyPI project for reachable compromised dependencies.
+
+    Examples:
+
+      hydrascan sindresorhus/got          scan a GitHub repo (owner/repo)
+
+      hydrascan https://github.com/x/y    scan a GitHub repo (full URL)
+
+      hydrascan ./package-lock.json       scan a local npm lockfile
+
+      hydrascan chalk/chalk --json        machine-readable output for CI
+
+    Exit codes: 0 = clean, 1 = compromised dependency reachable, 2 = error.
+    """
     base = (api or os.environ.get("HYDRASCAN_API_URL") or _DEFAULT_API).rstrip("/")
 
     try:

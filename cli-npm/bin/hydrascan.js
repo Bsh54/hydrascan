@@ -13,8 +13,42 @@ const c = {
 };
 
 function usage() {
-  console.error("usage: hydrascan [repo-url | owner/repo | lockfile]  (no arg = scan current directory)");
+  console.error("usage: hydrascan [target] [--json]   (run --help for details)");
   process.exitCode = 2;
+}
+
+function help() {
+  console.log(`
+${c.bold("hydrascan")} — graph-native supply-chain blast-radius analysis, powered by HydraDB.
+
+Scan an npm or PyPI project and see which dependencies are compromised and
+reachable, with the exact command to fix each one.
+
+${c.bold("Usage")}
+  hydrascan [target] [options]
+
+${c.bold("Target")} (optional — omit to scan the current directory)
+  owner/repo                 a GitHub repository shorthand
+  https://github.com/x/y     a full GitHub repository URL
+  ./package-lock.json        a local npm lockfile
+  (none)                     scan package-lock.json and requirements.txt here
+
+${c.bold("Options")}
+  --json                     emit the raw JSON result for CI and automation
+  -h, --help                 show this help
+
+${c.bold("Examples")}
+  npx hydrascan sindresorhus/got
+  npx hydrascan https://github.com/expressjs/express
+  npx hydrascan --json
+  hydrascan chalk/chalk
+
+${c.bold("Environment")}
+  HYDRASCAN_API_URL          point at your own HydraScan instance
+
+${c.bold("Exit codes")}
+  0  clean          1  compromised dependency reachable          2  error
+`);
 }
 
 function payload(target) {
@@ -86,6 +120,10 @@ async function run(body) {
 
 async function main() {
   const args = process.argv.slice(2);
+  if (args.includes("--help") || args.includes("-h")) {
+    help();
+    return;
+  }
   const asJson = args.includes("--json");
   const target = args.find((a) => !a.startsWith("-"));
 
