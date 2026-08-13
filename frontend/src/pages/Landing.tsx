@@ -2,6 +2,7 @@ import { Rocket } from "lucide-react";
 import { NavBar } from "../components/NavBar";
 import { Footer } from "../components/Footer";
 import { ScanForm } from "../components/ScanForm";
+import { HeroGraph } from "../components/HeroGraph";
 import { WebSection } from "../components/WebSection";
 import { CliSection } from "../components/CliSection";
 import { BotSection } from "../components/BotSection";
@@ -12,6 +13,7 @@ export function Landing() {
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-deep-space text-on-surface">
       <div className="fixed inset-0 -z-20 bg-deep-space" />
+      <HeroGraph />
       <div className="halo-glow pointer-events-none absolute left-1/2 top-[-200px] -z-10 h-[800px] w-full -translate-x-1/2" />
 
       <NavBar />
