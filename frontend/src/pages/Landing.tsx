@@ -3,6 +3,7 @@ import { NavBar } from "../components/NavBar";
 import { Footer } from "../components/Footer";
 import { ScanForm } from "../components/ScanForm";
 import { InstallCommands } from "../components/InstallCommands";
+import { BotSection } from "../components/BotSection";
 
 export function Landing() {
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -160,6 +161,9 @@ export function Landing() {
             </div>
           </div>
         </section>
+
+        {/* GitHub bot */}
+        <BotSection />
 
         {/* FAQ */}
         <section className="mx-auto mb-24 flex w-full max-w-3xl flex-col items-center">
