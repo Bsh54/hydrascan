@@ -1,0 +1,12 @@
+[Unit]
+Description=HydraScan continuous supply-chain watch
+After=network-online.target hydrascan.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/hydrascan
+Environment=HYDRADB_HTTP_URL=http://127.0.0.1:8443
+Environment=HYDRADB_GRAPH_TOKEN=local-development-token-32-bytes
+Environment=GITHUB_APP_ID=4575732
+Environment=GITHUB_APP_PRIVATE_KEY_FILE=/opt/hydrascan/app-key.pem
+ExecStart=/opt/hydrascan/.venv/bin/python -m hydrascan.web.watch

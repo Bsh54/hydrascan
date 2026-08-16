@@ -119,6 +119,16 @@ and it reviews every pull request on its own, no workflow file. It comments with
 the reachable compromised dependencies and their fixes, and sets a status check
 that can block the merge.
 
+### Continuous watch
+
+A package you installed while it was clean can be hijacked days later. On a timer,
+HydraScan re-computes the blast radius for every installed repository and opens a
+GitHub issue the moment a dependency it already trusts becomes a **reachable**
+compromise, then closes it once the threat is gone. Where the PR check guards new
+code, the watch guards code you already shipped. See
+[`deploy/hydrascan-watch.timer`](deploy/hydrascan-watch.timer) and
+[`watch.py`](src/hydrascan/web/watch.py).
+
 ## Running the full stack locally
 
 Start a HydraDB engine (any instance works):
