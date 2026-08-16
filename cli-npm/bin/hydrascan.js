@@ -35,6 +35,7 @@ ${c.bold("Target")} (optional — omit to scan the current directory)
 
 ${c.bold("Options")}
   --json                     emit the raw JSON result for CI and automation
+  --sarif                    emit SARIF 2.1.0 for GitHub code scanning
   -h, --help                 show this help
 
 ${c.bold("Examples")}
@@ -124,6 +125,38 @@ function windowLine(w) {
   return bits.join("  |  ");
 }
 
+function toSarif(scan) {
+  const manifest = scan.source === "lockfile"
+    ? "package-lock.json"
+    : scan.ecosystem === "PyPI" ? "requirements.txt" : "package.json";
+  const rules = new Map(), results = [];
+  for (const [group, malicious] of [["compromised", true], ["vulnerable", false]]) {
+    for (const entry of scan[group] || []) {
+      for (const adv of entry.advisories || []) {
+        if (!rules.has(adv.id)) rules.set(adv.id, {
+          id: adv.id,
+          name: adv.isMalicious ? "MaliciousPackage" : "VulnerableDependency",
+          shortDescription: { text: adv.summary || adv.id },
+          helpUri: `https://osv.dev/vulnerability/${adv.id}`,
+          defaultConfiguration: { level: adv.isMalicious ? "error" : "warning" },
+        });
+        const kind = malicious ? "Compromised package" : "Vulnerable dependency";
+        results.push({
+          ruleId: adv.id,
+          level: malicious ? "error" : "warning",
+          message: { text: `${kind} reachable from your project: ${entry.coordinate}. ${adv.summary || adv.id}` },
+          locations: [{ physicalLocation: { artifactLocation: { uri: manifest }, region: { startLine: 1 } } }],
+        });
+      }
+    }
+  }
+  return {
+    $schema: "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+    version: "2.1.0",
+    runs: [{ tool: { driver: { name: "HydraScan", informationUri: "https://hydrascan.shadrakbessanh.me", rules: [...rules.values()] } }, results }],
+  };
+}
+
 async function run(body) {
   const response = await fetch(`${API}/api/scan`, {
     method: "POST",
@@ -144,6 +177,7 @@ async function main() {
     return;
   }
   const asJson = args.includes("--json");
+  const asSarif = args.includes("--sarif");
   const target = args.find((a) => !a.startsWith("-"));
 
   const jobs = target
@@ -161,7 +195,9 @@ async function main() {
     try {
       const data = await run(job.body);
       results.push(data);
-      if (asJson) {
+      if (asSarif) {
+        console.log(JSON.stringify(toSarif(data), null, 2));
+      } else if (asJson) {
         console.log(JSON.stringify(data, null, 2));
       } else {
         if (job.label) console.log("\n" + c.dim(`── ${job.label} ──`));

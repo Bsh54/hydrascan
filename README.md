@@ -58,6 +58,14 @@ signal that matters for install-time malware.
   any npm or PyPI repository can be scanned.
 - Advisories come from [OSV.dev](https://osv.dev), queried per exact version.
 
+## Temporal layer
+
+A package is not equally dangerous forever. HydraScan annotates every reachable
+threat with **when** it was disclosed, how long the window has been open, and
+whether a patch exists yet. The resolved version rides on the `DEPENDS_ON` edge
+inside HydraDB, so the graph itself records which version each dependency link
+pulled in, the kind of git-style temporal reasoning a flat scan cannot do.
+
 ## Beyond the blast radius
 
 For npm, HydraScan also reports the questions a real incident raises: which
@@ -87,7 +95,22 @@ hydrascan                          # scan the current directory (npm + PyPI)
 ```
 
 It accepts a repo URL, an `owner/repo` shorthand, or a local lockfile path, and
-supports `--json` for automation.
+supports `--json` for automation and `--sarif` for GitHub code scanning:
+
+```bash
+npx hydrascan owner/repo --sarif > hydrascan.sarif
+# then upload hydrascan.sarif with github/codeql-action/upload-sarif
+```
+
+### Status badge
+
+Embed a repository's live exposure state in a README:
+
+```markdown
+![HydraScan](https://hydrascan.shadrakbessanh.me/api/badge?repo=owner/repo)
+```
+
+It renders `clean`, `N vulnerable`, or `N compromised` from a live scan.
 
 ### GitHub App
 

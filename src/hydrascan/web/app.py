@@ -7,11 +7,13 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from ..depsdev import ResolutionError
 from ..lockfile import LockfileError
+from .badge import badge_for_scan, render_badge
 from .bot import router as bot_router
 from .github import RepositoryError
 from .pipeline import ScanInputError, run_scan
@@ -53,6 +55,21 @@ def scan(request: ScanRequest) -> dict:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except (LockfileError, ResolutionError) as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/badge")
+def badge(repo: str) -> Response:
+    """Live SVG status badge for a repo, embeddable in a README."""
+    url = repo if "github.com" in repo else f"https://github.com/{repo}"
+    try:
+        message, color = badge_for_scan(run_scan(repo_url=url))
+    except Exception:
+        message, color = "unknown", "#9f9f9f"
+    return Response(
+        render_badge(message, color),
+        media_type="image/svg+xml",
+        headers={"Cache-Control": "max-age=1800"},
+    )
 
 
 app.include_router(bot_router)

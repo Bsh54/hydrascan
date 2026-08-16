@@ -1,6 +1,6 @@
 {
   "name": "hydrascan",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Graph-native supply-chain blast-radius analysis for npm and PyPI, powered by HydraDB.",
   "bin": {
     "hydrascan": "bin/hydrascan.js"

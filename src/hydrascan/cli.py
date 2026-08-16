@@ -56,6 +56,9 @@ def scan(
     as_json: bool = typer.Option(
         False, "--json", help="Emit the raw JSON result for CI and automation."
     ),
+    as_sarif: bool = typer.Option(
+        False, "--sarif", help="Emit SARIF 2.1.0 for GitHub code scanning."
+    ),
 ) -> None:
     """Scan an npm or PyPI project for reachable compromised dependencies.
 
@@ -85,7 +88,11 @@ def scan(
         raise typer.Exit(2)
 
     data = response.json()
-    if as_json:
+    if as_sarif:
+        from .sarif import to_sarif
+
+        typer.echo(json.dumps(to_sarif(data), indent=2))
+    elif as_json:
         typer.echo(json.dumps(data, indent=2))
     else:
         _render(data)
