@@ -42,6 +42,7 @@ class Advisory:
     is_malicious: bool = False
     fixed_version: str | None = None
     published: str | None = None
+    modified: str | None = None
 
 
 @dataclass(slots=True)

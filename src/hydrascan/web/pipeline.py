@@ -8,6 +8,7 @@ from ..maintainers import analyze_ownership
 from ..models import DependencyGraph
 from ..pypi import resolve_from_requirements
 from ..service import scan_graph
+from ..temporal import temporal_windows
 from ..typosquat import detect_typosquats
 from .github import fetch_lockfile, fetch_manifest, fetch_requirements
 from .serialize import serialize_scan
@@ -60,6 +61,15 @@ def run_scan(
     payload["source"] = source
     payload["ecosystem"] = ecosystem
     payload["engine"] = result.engine
+
+    # Temporal layer: attach each reachable threat's window (when it was
+    # disclosed, whether a patch exists, and how long it has been live).
+    windows = temporal_windows(result, ecosystem)
+    for entry in payload["compromised"] + payload["vulnerable"]:
+        entry["temporal"] = windows.get(entry["coordinate"])
+    payload["unpatchedThreats"] = sum(
+        1 for w in windows.values() if not w["patched"]
+    )
 
     # Shared-maintainer / infrastructure analysis is the worm signal: it only
     # makes sense for genuinely malicious packages, not ordinary CVEs.

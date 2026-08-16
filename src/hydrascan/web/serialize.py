@@ -127,5 +127,6 @@ def _serialize_advisory(advisory) -> dict[str, Any]:
         "severity": advisory.severity,
         "isMalicious": advisory.is_malicious,
         "published": advisory.published,
+        "modified": advisory.modified,
         "fixedVersion": advisory.fixed_version,
     }

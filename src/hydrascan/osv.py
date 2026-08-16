@@ -103,6 +103,7 @@ def _fetch_vuln(http: httpx.Client, vuln_id: str) -> Advisory:
         is_malicious=vuln_id.startswith("MAL-"),
         fixed_version=_fixed_version(data),
         published=(data.get("published") or "")[:10] or None,
+        modified=(data.get("modified") or "")[:10] or None,
     )
 
 

@@ -81,6 +81,29 @@ function Section({
                 )}
               </div>
 
+              {pkg.temporal && (
+                <div className="flex flex-wrap items-center gap-2 text-caption">
+                  {pkg.temporal.disclosedAt && (
+                    <span className="rounded-full border border-slate-edge px-2 py-0.5 text-mercury">
+                      window opened {pkg.temporal.disclosedAt}
+                      {pkg.temporal.daysSinceDisclosed != null ? ` · ${pkg.temporal.daysSinceDisclosed}d live` : ""}
+                    </span>
+                  )}
+                  <span
+                    className={`rounded-full px-2 py-0.5 font-medium ${
+                      pkg.temporal.patched ? "bg-tertiary/15 text-tertiary" : "bg-error/15 text-error"
+                    }`}
+                  >
+                    {pkg.temporal.patched ? "patch available" : "no patch yet"}
+                  </span>
+                  {pkg.temporal.resolvedPublishedAt && (
+                    <span className="text-mercury">
+                      your {pkg.temporal.resolvedVersion} published {pkg.temporal.resolvedPublishedAt}
+                    </span>
+                  )}
+                </div>
+              )}
+
               <div className="flex flex-col gap-2">
                 {pkg.advisories.map((a) => (
                   <div key={a.id} className="flex items-start gap-2">

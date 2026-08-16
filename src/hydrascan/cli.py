@@ -122,6 +122,12 @@ def _render(data: dict) -> None:
     malware = [f for f in fixes if f.get("kind") == "malware"]
     cves = [f for f in fixes if f.get("kind") != "malware"]
 
+    temporal = {
+        e["coordinate"]: e["temporal"]
+        for e in data.get("compromised", []) + data.get("vulnerable", [])
+        if e.get("temporal")
+    }
+
     if not fixes:
         typer.echo()
         typer.secho("  No reachable compromised or vulnerable dependencies.", fg=typer.colors.GREEN)
@@ -129,13 +135,13 @@ def _render(data: dict) -> None:
         return
 
     if malware:
-        _section("Compromised - malicious packages reachable", malware, typer.colors.RED)
+        _section("Compromised - malicious packages reachable", malware, typer.colors.RED, temporal)
     if cves:
-        _section("Known vulnerabilities reachable", cves, typer.colors.YELLOW)
+        _section("Known vulnerabilities reachable", cves, typer.colors.YELLOW, temporal)
     typer.echo()
 
 
-def _section(title: str, fixes: list[dict], color: str) -> None:
+def _section(title: str, fixes: list[dict], color: str, temporal: dict) -> None:
     width = max(len(f["package"]) for f in fixes)
     typer.echo()
     typer.secho(f"  {title} ({len(fixes)}):", fg=color, bold=True)
@@ -145,6 +151,21 @@ def _section(title: str, fixes: list[dict], color: str) -> None:
         typer.secho(f"{fix['package']:<{width}}", fg=color, nl=False)
         typer.echo("   ->   ", nl=False)
         typer.secho(fix["command"], fg=typer.colors.GREEN)
+        window = _window_line(temporal.get(fix["package"]))
+        if window:
+            typer.secho(f"    {' ' * width}        {window}", fg=typer.colors.BRIGHT_BLACK)
+
+
+def _window_line(window: dict | None) -> str:
+    if not window:
+        return ""
+    bits = []
+    if window.get("disclosedAt"):
+        days = window.get("daysSinceDisclosed")
+        age = f" ({days}d ago)" if days is not None else ""
+        bits.append(f"disclosed {window['disclosedAt']}{age}")
+    bits.append("patch available" if window.get("patched") else "no patch yet")
+    return "  |  ".join(bits)
 
 
 def _risk(score: int) -> str:

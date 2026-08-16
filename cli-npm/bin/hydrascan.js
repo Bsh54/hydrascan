@@ -95,14 +95,33 @@ function render(data) {
     return;
   }
 
+  const temporal = new Map(
+    [...(data.compromised ?? []), ...(data.vulnerable ?? [])]
+      .filter((e) => e.temporal)
+      .map((e) => [e.coordinate, e.temporal]),
+  );
+
   const width = Math.max(...fixes.map((f) => f.package.length));
   console.log();
   console.log("  " + c.red(c.bold(`Fixes (${fixes.length} compromised ${fixes.length === 1 ? "dependency" : "dependencies"}):`)));
   console.log();
   for (const fix of fixes) {
     console.log("    " + c.red(fix.package.padEnd(width)) + "   ->   " + c.green(fix.command));
+    const line = windowLine(temporal.get(fix.package));
+    if (line) console.log("    " + " ".repeat(width) + "        " + c.dim(line));
   }
   console.log();
+}
+
+function windowLine(w) {
+  if (!w) return "";
+  const bits = [];
+  if (w.disclosedAt) {
+    const age = w.daysSinceDisclosed != null ? ` (${w.daysSinceDisclosed}d ago)` : "";
+    bits.push(`disclosed ${w.disclosedAt}${age}`);
+  }
+  bits.push(w.patched ? "patch available" : "no patch yet");
+  return bits.join("  |  ");
 }
 
 async function run(body) {

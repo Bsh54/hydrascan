@@ -41,9 +41,18 @@ export interface AttackPath {
   advisory: Advisory;
 }
 
+export interface TemporalWindow {
+  resolvedVersion: string;
+  resolvedPublishedAt?: string | null;
+  disclosedAt?: string | null;
+  patched: boolean;
+  daysSinceDisclosed?: number | null;
+}
+
 export interface CompromisedPackage {
   coordinate: string;
   advisories: Advisory[];
+  temporal?: TemporalWindow | null;
 }
 
 export interface Remediation {

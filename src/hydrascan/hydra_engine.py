@@ -92,8 +92,13 @@ class HydraEngine:
             return f"{{id:{ids[node_id]}, name:{_quote(pkg.coordinate)}}}"
 
         for edge in graph.edges:
+            # The resolved version rides on the edge so the graph itself records
+            # which version each dependency link pulled in (the temporal layer).
+            version = graph.packages[edge.dependency].version
             self._query(
-                f"CREATE (a {term(edge.requirer)})-[:DEPENDS_ON]->(b {term(edge.dependency)})"
+                f"CREATE (a {term(edge.requirer)})"
+                f"-[:DEPENDS_ON {{version:{_quote(version)}}}]->"
+                f"(b {term(edge.dependency)})"
             )
 
     def _shortest_paths(self, source: int, target: int) -> list[list[int]]:

@@ -85,6 +85,15 @@ def _direct_requirements(manifest: dict[str, Any]) -> dict[str, str]:
     return requirements
 
 
+def version_published_at(http: httpx.Client, name: str, version: str) -> str | None:
+    """Return the npm publish date (YYYY-MM-DD) of a specific package version."""
+    response = http.get(_REGISTRY.format(name=name))
+    if response.status_code != 200:
+        return None
+    stamp = (response.json().get("time") or {}).get(version)
+    return stamp[:10] if stamp else None
+
+
 def _resolve_version(http: httpx.Client, name: str, requirement: str) -> str | None:
     response = http.get(_REGISTRY.format(name=name))
     if response.status_code != 200:
